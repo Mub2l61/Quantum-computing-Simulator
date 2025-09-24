@@ -1,4 +1,3 @@
-import openai
 import os
 from typing import Dict, List, Any
 import json
@@ -7,13 +6,33 @@ class AIAssistant:
     """AI assistant for quantum computing suggestions"""
     
     def __init__(self):
-        self.client = openai.OpenAI(api_key=os.environ.get('OPENAI_API_KEY', ''))
+        self.has_openai = False
+        self.client = None
+        
+        # Try to import and setup OpenAI only if available
+        try:
+            import openai
+            api_key = os.environ.get('OPENAI_API_KEY', '')
+            if api_key:
+                self.client = openai.OpenAI(api_key=api_key)
+                self.has_openai = True
+        except ImportError:
+            pass
+        except Exception:
+            pass
+            
         self.context_history = []
     
     def get_suggestions(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Get AI suggestions based on current context"""
         try:
-            # For now, provide rule-based suggestions until OpenAI key is available
+            # Use OpenAI if available, otherwise use rule-based suggestions
+            if self.has_openai and self.client:
+                ai_suggestions = self._get_ai_suggestions(context)
+                if ai_suggestions:
+                    return ai_suggestions
+            
+            # Fallback to rule-based suggestions
             return self._get_rule_based_suggestions(context)
         except Exception as e:
             print(f"AI suggestion error: {e}")
