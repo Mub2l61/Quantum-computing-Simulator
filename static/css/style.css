@@ -1,0 +1,307 @@
+/* Quantum Computing Simulator Styles */
+
+body {
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.container-fluid {
+    height: 100vh;
+    padding: 0;
+}
+
+.panel {
+    background: white;
+    border-radius: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-header {
+    background: #f8f9fa;
+    padding: 15px;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-header h4 {
+    margin: 0;
+    color: #495057;
+}
+
+.toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Gate Palette Styles */
+.gate-palette {
+    padding: 15px;
+    border-bottom: 1px solid #dee2e6;
+    background: #f8f9fa;
+}
+
+.gate-category {
+    margin-bottom: 15px;
+}
+
+.gate-category h6 {
+    margin-bottom: 8px;
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.gate-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.gate-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+    min-width: 45px;
+}
+
+.gate-btn:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.gate-btn:active {
+    transform: translateY(0);
+}
+
+.gate-btn.selected {
+    background: #28a745;
+}
+
+/* Circuit Canvas Styles */
+.circuit-canvas {
+    flex: 1;
+    padding: 20px;
+    background: white;
+    position: relative;
+    min-height: 300px;
+    overflow: auto;
+}
+
+.qubit-wire {
+    stroke: #333;
+    stroke-width: 2;
+    fill: none;
+}
+
+.qubit-label {
+    font-size: 14px;
+    font-weight: bold;
+    fill: #333;
+}
+
+.gate {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.gate:hover {
+    filter: brightness(1.1);
+}
+
+.gate rect {
+    fill: #007bff;
+    stroke: #0056b3;
+    stroke-width: 2;
+    rx: 4;
+}
+
+.gate text {
+    fill: white;
+    font-weight: bold;
+    font-size: 12px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+.cnot-gate .control {
+    fill: #333;
+    stroke: #333;
+    stroke-width: 2;
+}
+
+.cnot-gate .target {
+    fill: none;
+    stroke: #333;
+    stroke-width: 2;
+}
+
+.cnot-gate .connection {
+    stroke: #333;
+    stroke-width: 2;
+}
+
+/* AI Suggestions Styles */
+.ai-suggestions {
+    padding: 15px;
+    background: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+.ai-suggestions h6 {
+    margin-bottom: 10px;
+    color: #6c757d;
+}
+
+.suggestion-item {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.suggestion-item:hover {
+    border-color: #007bff;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.15);
+}
+
+.suggestion-text {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.suggestion-confidence {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+/* Code Editor Styles */
+.code-editor-container {
+    flex: 1;
+    position: relative;
+}
+
+.CodeMirror {
+    height: 100% !important;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+}
+
+/* Results Panel Styles */
+.results-panel {
+    border-top: 1px solid #dee2e6;
+    background: #f8f9fa;
+    padding: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.results-content {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+.state-viz {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px;
+    min-height: 100px;
+}
+
+.probability-bar {
+    background: #007bff;
+    height: 20px;
+    margin: 2px 0;
+    border-radius: 2px;
+    position: relative;
+}
+
+.probability-label {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.basis-state {
+    font-family: monospace;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .col-md-6 {
+        height: 50vh;
+    }
+    
+    .panel {
+        height: 100%;
+    }
+    
+    .gate-buttons {
+        justify-content: center;
+    }
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Error and Success States */
+.error {
+    border-color: #dc3545 !important;
+    background-color: #f8d7da !important;
+}
+
+.success {
+    border-color: #28a745 !important;
+    background-color: #d4edda !important;
+}
+
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Quantum State Colors */
+.state-0 { color: #007bff; }
+.state-1 { color: #28a745; }
+.entangled { color: #dc3545; }
+.superposition { color: #ffc107; }

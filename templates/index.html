@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Computing Simulator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container-fluid h-100">
+        <div class="row">
+            <!-- Header -->
+            <div class="col-12 bg-primary text-white p-3">
+                <h1><i class="fas fa-atom"></i> Quantum Computing Simulator</h1>
+                <p class="mb-0">AI-Powered Quantum Circuit Builder and Simulator</p>
+            </div>
+        </div>
+        
+        <div class="row h-100">
+            <!-- Circuit Builder Panel -->
+            <div class="col-md-6 p-0">
+                <div class="panel h-100">
+                    <div class="panel-header">
+                        <h4><i class="fas fa-project-diagram"></i> Circuit Builder</h4>
+                        <div class="toolbar">
+                            <button id="clearCircuit" class="btn btn-sm btn-outline-danger">Clear</button>
+                            <button id="runSimulation" class="btn btn-sm btn-success">Simulate</button>
+                            <select id="qubitCount" class="form-select form-select-sm d-inline-block w-auto">
+                                <option value="2">2 Qubits</option>
+                                <option value="3">3 Qubits</option>
+                                <option value="4">4 Qubits</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Gate Palette -->
+                    <div class="gate-palette">
+                        <div class="gate-category">
+                            <h6>Single Qubit Gates</h6>
+                            <div class="gate-buttons">
+                                <button class="gate-btn" data-gate="H">H</button>
+                                <button class="gate-btn" data-gate="X">X</button>
+                                <button class="gate-btn" data-gate="Y">Y</button>
+                                <button class="gate-btn" data-gate="Z">Z</button>
+                                <button class="gate-btn" data-gate="S">S</button>
+                                <button class="gate-btn" data-gate="T">T</button>
+                            </div>
+                        </div>
+                        <div class="gate-category">
+                            <h6>Two Qubit Gates</h6>
+                            <div class="gate-buttons">
+                                <button class="gate-btn" data-gate="CNOT">CNOT</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Circuit Canvas -->
+                    <div id="circuitCanvas" class="circuit-canvas"></div>
+                    
+                    <!-- AI Suggestions -->
+                    <div class="ai-suggestions">
+                        <h6><i class="fas fa-robot"></i> AI Suggestions</h6>
+                        <div id="aiSuggestions" class="suggestions-list">
+                            <p class="text-muted">Start building your circuit to get AI suggestions...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Code Editor and Results Panel -->
+            <div class="col-md-6 p-0">
+                <div class="panel h-100">
+                    <div class="panel-header">
+                        <h4><i class="fas fa-code"></i> Quantum Code Editor</h4>
+                        <div class="toolbar">
+                            <button id="runCode" class="btn btn-sm btn-primary">Run Code</button>
+                            <select id="algorithmTemplate" class="form-select form-select-sm d-inline-block w-auto">
+                                <option value="">Select Template</option>
+                                <option value="bell_state">Bell State</option>
+                                <option value="grovers_search">Grover's Search</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Code Editor -->
+                    <div class="code-editor-container">
+                        <textarea id="codeEditor"># Quantum Circuit Code
+# Build your quantum circuit using Python-like syntax
+
+circuit = QuantumCircuit(2)
+circuit.h(0)  # Apply Hadamard gate to qubit 0
+circuit.cnot(0, 1)  # Apply CNOT gate with control=0, target=1
+circuit.measure_all()  # Measure all qubits
+</textarea>
+                    </div>
+                    
+                    <!-- Results Panel -->
+                    <div class="results-panel">
+                        <h6><i class="fas fa-chart-bar"></i> Simulation Results</h6>
+                        <div id="simulationResults" class="results-content">
+                            <p class="text-muted">Run a simulation to see results...</p>
+                        </div>
+                        
+                        <!-- State Visualization -->
+                        <div id="stateVisualization" class="state-viz"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <script src="{{ url_for('static', filename='js/circuit-builder.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/code-editor.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/quantum-simulator.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ai-assistant.js') }}"></script>
+</body>
+</html>
