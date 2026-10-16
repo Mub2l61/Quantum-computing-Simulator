@@ -78,8 +78,9 @@ def get_algorithms():
     """Get available quantum algorithm templates"""
     algorithms = {
         'bell_state': {
-            'name': 'Bell State',
-            'description': 'Creates an entangled Bell state',
+            'name': 'Bell State Q01-Q02',
+            'description': 'Creates maximally entangled Bell state (|00⟩ + |11⟩)/√2',
+            'num_qubits': 2,
             'gates': [
                 {'type': 'H', 'qubit': 0},
                 {'type': 'CNOT', 'control': 0, 'target': 1}
@@ -87,7 +88,8 @@ def get_algorithms():
         },
         'grovers_search': {
             'name': "Grover's Search",
-            'description': 'Quantum search algorithm',
+            'description': 'Quantum amplitude amplification search algorithm',
+            'num_qubits': 2,
             'gates': [
                 {'type': 'H', 'qubit': 0},
                 {'type': 'H', 'qubit': 1},
@@ -95,6 +97,27 @@ def get_algorithms():
                 {'type': 'CNOT', 'control': 0, 'target': 1},
                 {'type': 'H', 'qubit': 0},
                 {'type': 'H', 'qubit': 1}
+            ]
+        },
+        'ghz_state': {
+            'name': 'GHZ Multi-Qubit Entanglement',
+            'description': '3-qubit Greenberger–Horne–Zeilinger state (|000⟩ + |111⟩)/√2',
+            'num_qubits': 3,
+            'gates': [
+                {'type': 'H', 'qubit': 0},
+                {'type': 'CNOT', 'control': 0, 'target': 1},
+                {'type': 'CNOT', 'control': 1, 'target': 2}
+            ]
+        },
+        'quantum_teleportation': {
+            'name': 'Quantum Teleportation Protocol',
+            'description': 'Transfers quantum state across entangled qubits',
+            'num_qubits': 3,
+            'gates': [
+                {'type': 'H', 'qubit': 1},
+                {'type': 'CNOT', 'control': 1, 'target': 2},
+                {'type': 'CNOT', 'control': 0, 'target': 1},
+                {'type': 'H', 'qubit': 0}
             ]
         }
     }
