@@ -3,124 +3,385 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantum Computing Simulator</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>QCS - Quantum Computing Simulator</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
-    <div class="container-fluid h-100">
-        <div class="row">
-            <!-- Header -->
-            <div class="col-12 bg-primary text-white p-3">
-                <h1><i class="fas fa-atom"></i> Quantum Computing Simulator</h1>
-                <p class="mb-0">AI-Powered Quantum Circuit Builder and Simulator</p>
-            </div>
+<body class="qcs-hud-body">
+
+    <!-- Technical Background Blueprint Layer -->
+    <div class="hud-blueprint-grid"></div>
+    <div class="hud-background-art"></div>
+
+    <!-- HUD Outer Technical Header Bar -->
+    <header class="hud-header">
+        <div class="hud-header-left">
+            <span class="hud-icon-crosshair"><i class="fa-solid fa-crosshairs"></i></span>
+            <span class="hud-tag">DESKTOP / TABLET</span>
         </div>
-        
-        <div class="row h-100">
-            <!-- Circuit Builder Panel -->
-            <div class="col-md-6 p-0">
-                <div class="panel h-100">
-                    <div class="panel-header">
-                        <h4><i class="fas fa-project-diagram"></i> Circuit Builder</h4>
-                        <div class="toolbar">
-                            <button id="clearCircuit" class="btn btn-sm btn-outline-danger">Clear</button>
-                            <button id="runSimulation" class="btn btn-sm btn-success">Simulate</button>
-                            <select id="qubitCount" class="form-select form-select-sm d-inline-block w-auto">
-                                <option value="2">2 Qubits</option>
-                                <option value="3">3 Qubits</option>
-                                <option value="4">4 Qubits</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <!-- Gate Palette -->
-                    <div class="gate-palette">
-                        <div class="gate-category">
-                            <h6>Single Qubit Gates</h6>
-                            <div class="gate-buttons">
-                                <button class="gate-btn" data-gate="H">H</button>
-                                <button class="gate-btn" data-gate="X">X</button>
-                                <button class="gate-btn" data-gate="Y">Y</button>
-                                <button class="gate-btn" data-gate="Z">Z</button>
-                                <button class="gate-btn" data-gate="S">S</button>
-                                <button class="gate-btn" data-gate="T">T</button>
-                            </div>
-                        </div>
-                        <div class="gate-category">
-                            <h6>Two Qubit Gates</h6>
-                            <div class="gate-buttons">
-                                <button class="gate-btn" data-gate="CNOT">CNOT</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Circuit Canvas -->
-                    <div id="circuitCanvas" class="circuit-canvas"></div>
-                    
-                    <!-- AI Suggestions -->
-                    <div class="ai-suggestions">
-                        <h6><i class="fas fa-robot"></i> AI Suggestions</h6>
-                        <div id="aiSuggestions" class="suggestions-list">
-                            <p class="text-muted">Start building your circuit to get AI suggestions...</p>
-                        </div>
-                    </div>
+        <div class="hud-header-center">
+            <span class="hud-subtitle">3D MULTI-QUBIT LATTICE, STATE TOMOGRAPHY, ALGORITHM VERIFICATION</span>
+        </div>
+        <div class="hud-header-right">
+            <span class="hud-year">2026</span>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container-fluid qcs-app-container">
+        <!-- Application Main Window -->
+        <div class="qcs-window">
+
+            <!-- Window Navigation Bar -->
+            <div class="qcs-window-bar">
+                <div class="qcs-brand">
+                    <span class="brand-logo">QCS</span>
+                    <span class="brand-title">Quantum Computing</span>
+                </div>
+
+                <nav class="qcs-nav-links">
+                    <button class="nav-link-btn active" data-tab="lattice-tab"><i class="fa-solid fa-cubes"></i> World Lattice</button>
+                    <button class="nav-link-btn" data-tab="circuit-tab"><i class="fa-solid fa-diagram-project"></i> Circuit Builder</button>
+                    <button class="nav-link-btn" data-tab="editor-tab"><i class="fa-solid fa-code"></i> Code Editor</button>
+                    <button class="nav-link-btn" data-tab="tomography-tab"><i class="fa-solid fa-chart-pie"></i> State Tomography</button>
+                </nav>
+
+                <div class="qcs-search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="hudSearchInput" placeholder="Search gates, qubit states, algorithms..." autocomplete="off">
+                </div>
+
+                <div class="qcs-status-indicator">
+                    <span class="status-dot green-glow"></span>
+                    <span class="status-text">LATTICE MATRIX: 8x8</span>
+                    <span class="status-badge">EMU</span>
                 </div>
             </div>
-            
-            <!-- Code Editor and Results Panel -->
-            <div class="col-md-6 p-0">
-                <div class="panel h-100">
-                    <div class="panel-header">
-                        <h4><i class="fas fa-code"></i> Quantum Code Editor</h4>
-                        <div class="toolbar">
-                            <button id="runCode" class="btn btn-sm btn-primary">Run Code</button>
-                            <select id="algorithmTemplate" class="form-select form-select-sm d-inline-block w-auto">
-                                <option value="">Select Template</option>
-                                <option value="bell_state">Bell State</option>
-                                <option value="grovers_search">Grover's Search</option>
-                            </select>
+
+            <!-- View Area Split -->
+            <div class="qcs-main-viewport">
+
+                <!-- Left Sidebar Controls -->
+                <aside class="qcs-sidebar-left">
+                    
+                    <!-- Gate Libraries Panel -->
+                    <div class="hud-card">
+                        <div class="card-header-title">GATE LIBRARIES</div>
+                        <div class="gate-lib-buttons">
+                            <button class="gate-category-btn active" data-category="single">Single-Qubit</button>
+                            <button class="gate-category-btn" data-category="two">Two-Qubit</button>
+                            <button class="gate-category-btn" data-category="multi">Multi-Qubit</button>
+                        </div>
+
+                        <!-- Gate Palette List -->
+                        <div class="gate-palette-grid">
+                            <!-- Single Qubit Gates -->
+                            <div class="gate-group active" id="singleQubitGates">
+                                <button class="gate-chip" data-gate="H" title="Hadamard Gate"><span class="gate-name">H</span></button>
+                                <button class="gate-chip" data-gate="X" title="Pauli-X (NOT)"><span class="gate-name">X</span></button>
+                                <button class="gate-chip" data-gate="Y" title="Pauli-Y"><span class="gate-name">Y</span></button>
+                                <button class="gate-chip" data-gate="Z" title="Pauli-Z Phase Shift"><span class="gate-name">Z</span></button>
+                                <button class="gate-chip" data-gate="S" title="Phase S Gate"><span class="gate-name">S</span></button>
+                                <button class="gate-chip" data-gate="T" title="T Gate (π/8)"><span class="gate-name">T</span></button>
+                            </div>
+                            <!-- Two Qubit Gates -->
+                            <div class="gate-group" id="twoQubitGates" style="display:none;">
+                                <button class="gate-chip gate-chip-cnot" data-gate="CNOT" title="Controlled-NOT"><span class="gate-name">CNOT</span></button>
+                            </div>
+                            <!-- Multi Qubit Gates -->
+                            <div class="gate-group" id="multiQubitGates" style="display:none;">
+                                <button class="gate-chip gate-chip-multi" data-gate="SWAP" title="SWAP Gate"><span class="gate-name">SWAP</span></button>
+                                <button class="gate-chip gate-chip-multi" data-gate="CZ" title="Controlled-Z"><span class="gate-name">CZ</span></button>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- State Vectors Control -->
+                    <div class="hud-card">
+                        <div class="card-header-title">
+                            <span>State Vectors</span>
+                            <span class="badge-tech">ACTIVE</span>
+                        </div>
+                        <div class="slider-control-group">
+                            <input type="range" id="stateVectorSlider" min="1" max="10" value="7" class="hud-slider">
+                            <div class="slider-labels">
+                                <span>Coherence</span>
+                                <span id="coherenceValue">99.4%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Algorithms Library -->
+                    <div class="hud-card">
+                        <div class="card-header-title">ALGORITHMS</div>
+                        <div class="algorithm-list">
+                            <button class="algo-btn active" data-algo="bell_state">
+                                <i class="fa-solid fa-atom"></i> Bell States
+                            </button>
+                            <button class="algo-btn" data-algo="grovers_search">
+                                <i class="fa-solid fa-magnifying-glass-chart"></i> Grover's Search
+                            </button>
+                            <button class="algo-btn" data-algo="ghz_state">
+                                <i class="fa-solid fa-network-wired"></i> GHZ Entanglement
+                            </button>
+                            <button class="algo-btn" data-algo="quantum_teleportation">
+                                <i class="fa-solid fa-bolt"></i> Teleportation
+                            </button>
+                        </div>
+                    </div>
+
+                </aside>
+
+                <!-- Center Display / Multi-Tab Canvas Area -->
+                <main class="qcs-center-stage">
                     
-                    <!-- Code Editor -->
-                    <div class="code-editor-container">
-                        <textarea id="codeEditor"># Quantum Circuit Code
-# Build your quantum circuit using Python-like syntax
+                    <!-- TAB 1: 3D Lattice Visualization View (Default View in Image) -->
+                    <div class="tab-pane-view active" id="lattice-tab">
+                        <div class="lattice-canvas-container" id="latticeCanvasContainer">
+                            <!-- Three.js Canvas injected here -->
+                        </div>
+
+                        <!-- Floating Viewport Controls -->
+                        <div class="viewport-controls">
+                            <button class="vp-btn" id="vpZoomIn" title="Zoom In"><i class="fa-solid fa-plus"></i></button>
+                            <button class="vp-btn" id="vpZoomOut" title="Zoom Out"><i class="fa-solid fa-minus"></i></button>
+                            <button class="vp-btn" id="vpRotateToggle" title="Toggle Auto-Rotation"><i class="fa-solid fa-arrows-spin"></i></button>
+                            <button class="vp-btn" id="vpReset" title="Reset Camera"><i class="fa-solid fa-expand"></i></button>
+                        </div>
+
+                        <!-- Canvas Overlay Caption -->
+                        <div class="canvas-bottom-caption">
+                            <span>Display option: React to noise matrix, gate jitter, state tomography view mode.</span>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: Interactive Circuit Builder View -->
+                    <div class="tab-pane-view" id="circuit-tab" style="display: none;">
+                        <div class="circuit-toolbar">
+                            <div class="qubit-selector-group">
+                                <label for="qubitCount"><i class="fa-solid fa-microchip"></i> Qubits:</label>
+                                <select id="qubitCount" class="hud-select">
+                                    <option value="2" selected>2 Qubits (Q01-Q02)</option>
+                                    <option value="3">3 Qubits (Q01-Q03)</option>
+                                    <option value="4">4 Qubits (Q01-Q04)</option>
+                                </select>
+                            </div>
+                            <div class="toolbar-actions">
+                                <button id="clearCircuit" class="hud-btn hud-btn-danger"><i class="fa-solid fa-trash-can"></i> Clear</button>
+                                <button id="runSimulation" class="hud-btn hud-btn-success"><i class="fa-solid fa-play"></i> Simulate Circuit</button>
+                            </div>
+                        </div>
+                        <div id="circuitCanvas" class="hud-circuit-canvas"></div>
+                    </div>
+
+                    <!-- TAB 3: Quantum Code Editor View -->
+                    <div class="tab-pane-view" id="editor-tab" style="display: none;">
+                        <div class="editor-header-bar">
+                            <span class="editor-lang-tag"><i class="fa-brands fa-python"></i> Qiskit / Python Engine</span>
+                            <div class="editor-actions">
+                                <select id="algorithmTemplate" class="hud-select me-2">
+                                    <option value="">Load Template...</option>
+                                    <option value="bell_state">Bell State</option>
+                                    <option value="grovers_search">Grover's Search</option>
+                                    <option value="ghz_state">GHZ State</option>
+                                    <option value="quantum_teleportation">Quantum Teleportation</option>
+                                </select>
+                                <button id="runCode" class="hud-btn hud-btn-primary"><i class="fa-solid fa-bolt"></i> Execute Script</button>
+                            </div>
+                        </div>
+                        <div class="code-editor-wrapper">
+                            <textarea id="codeEditor"># Quantum Circuit Simulation Script
+# Bell State Q01-Q02 Generation
 
 circuit = QuantumCircuit(2)
-circuit.h(0)  # Apply Hadamard gate to qubit 0
-circuit.cnot(0, 1)  # Apply CNOT gate with control=0, target=1
-circuit.measure_all()  # Measure all qubits
+circuit.h(0)         # Hadamard superposition on q0
+circuit.cnot(0, 1)   # Entangle q0 -> q1
+circuit.measure_all() # State Tomography Measurement
 </textarea>
-                    </div>
-                    
-                    <!-- Results Panel -->
-                    <div class="results-panel">
-                        <h6><i class="fas fa-chart-bar"></i> Simulation Results</h6>
-                        <div id="simulationResults" class="results-content">
-                            <p class="text-muted">Run a simulation to see results...</p>
                         </div>
+                    </div>
+
+                    <!-- TAB 4: State Tomography Diagnostics -->
+                    <div class="tab-pane-view" id="tomography-tab" style="display: none;">
+                        <div class="tomography-grid">
+                            <div class="tomography-card">
+                                <h6>Density Matrix ρ (Real & Imaginary)</h6>
+                                <div id="densityMatrixContainer" class="matrix-viz"></div>
+                            </div>
+                            <div class="tomography-card">
+                                <h6>Bloch Sphere Coordinates</h6>
+                                <div id="blochCoordinatesList" class="bloch-coords-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </main>
+
+                <!-- Right Sidebar Analytics & Tomography Panel -->
+                <aside class="qcs-sidebar-right">
+
+                    <!-- State Vector Analysis -->
+                    <div class="hud-card">
+                        <div class="card-header-title">State Vector Analysis</div>
+                        <p class="card-desc">Brief description of quantum state measurement probability in selected entangled pair.</p>
                         
-                        <!-- State Visualization -->
-                        <div id="stateVisualization" class="state-viz"></div>
+                        <div class="card-section-subtitle">Measurement Probabilities</div>
+
+                        <!-- Dynamic Measurement Probabilities -->
+                        <div id="measurementProbabilitiesList" class="probability-bars-container">
+                            <div class="prob-row">
+                                <span class="prob-state">|00⟩</span>
+                                <div class="prob-track"><div class="prob-fill" style="width: 50%;"></div></div>
+                                <span class="prob-val">50.0%</span>
+                            </div>
+                            <div class="prob-row">
+                                <span class="prob-state">|11⟩</span>
+                                <div class="prob-track"><div class="prob-fill" style="width: 50%;"></div></div>
+                                <span class="prob-val">50.0%</span>
+                            </div>
+                            <div class="prob-row">
+                                <span class="prob-state">|01⟩</span>
+                                <div class="prob-track"><div class="prob-fill" style="width: 0%;"></div></div>
+                                <span class="prob-val">0.0%</span>
+                            </div>
+                            <div class="prob-row">
+                                <span class="prob-state">|10⟩</span>
+                                <div class="prob-track"><div class="prob-fill" style="width: 0%;"></div></div>
+                                <span class="prob-val">0.0%</span>
+                            </div>
+                        </div>
+
+                        <!-- Entanglement Fidelity Meter -->
+                        <div class="metric-row mt-3">
+                            <div class="metric-label">Q01/Q02 Entanglement Fidelity</div>
+                            <div class="metric-value-lg" id="fidelityValue">0.990</div>
+                        </div>
+
+                        <!-- Error Rate Meter -->
+                        <div class="metric-row mt-2">
+                            <div class="metric-label">Error Rates</div>
+                            <div class="metric-value" id="errorRateValue">0.5%</div>
+                            <div class="hud-progress-bar mt-1">
+                                <div class="hud-progress-fill" id="errorRateFill" style="width: 5%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Real-time Oscilloscope / Measurement Time-series Chart Card -->
+                    <div class="hud-card">
+                        <div class="card-header-title d-flex justify-content-between align-items-center">
+                            <span>B002S0007 WO627S</span>
+                            <span class="hud-close-x"><i class="fa-solid fa-xmark"></i></span>
+                        </div>
+                        <div class="chart-header-sub">
+                            <span class="chart-tab active">Measurement</span>
+                            <span class="chart-tab">Waveform</span>
+                            <span class="chart-tab">Phase Trend</span>
+                        </div>
+                        <div class="waveform-chart-container">
+                            <canvas id="waveformCanvas" width="280" height="110"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- AI Copilot Suggestions Card -->
+                    <div class="hud-card">
+                        <div class="card-header-title"><i class="fa-solid fa-robot"></i> AI Quantum Copilot</div>
+                        <div id="aiSuggestions" class="ai-suggestions-list">
+                            <p class="text-muted text-sm">Analyzing quantum state lattice...</p>
+                        </div>
+                    </div>
+
+                </aside>
+
+            </div>
+
+            <!-- Front Tablet Panel Component (Qubit Register Profile Overlay / Bottom Bar) -->
+            <div class="qcs-tablet-panel" id="tabletPanel">
+                <div class="tablet-header">
+                    <div class="tablet-title-group">
+                        <span class="tablet-badge">Qubit Register Profile:</span>
+                        <span class="tablet-profile-name" id="tabletProfileName">Bell State Q01-Q02</span>
+                    </div>
+                    <div class="tablet-controls">
+                        <button class="tablet-btn-sm" id="toggleTabletPanel"><i class="fa-solid fa-chevron-down"></i></button>
+                    </div>
+                </div>
+
+                <div class="tablet-body">
+                    <!-- Circuit Wire Diagram Mini-Preview -->
+                    <div class="tablet-col">
+                        <div class="mini-circuit-diagram" id="miniCircuitDiagram">
+                            <!-- Rendered by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Probabilities Summary -->
+                    <div class="tablet-col">
+                        <div class="tablet-subhead">Probabilities of Measurement (|00⟩, |11⟩, |01⟩, |10⟩)</div>
+                        <div class="tablet-prob-bars" id="tabletProbBars">
+                            <div class="t-prob-item"><span class="t-lbl">|00⟩</span><div class="t-bar"><div class="t-fill" style="width:50%"></div></div><span class="t-val">50%</span></div>
+                            <div class="t-prob-item"><span class="t-lbl">|11⟩</span><div class="t-bar"><div class="t-fill" style="width:50%"></div></div><span class="t-val">50%</span></div>
+                            <div class="t-prob-item"><span class="t-lbl">|01⟩</span><div class="t-bar"><div class="t-fill" style="width:0%"></div></div><span class="t-val">0%</span></div>
+                            <div class="t-prob-item"><span class="t-lbl">|10⟩</span><div class="t-bar"><div class="t-fill" style="width:0%"></div></div><span class="t-val">0%</span></div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <div><span class="t-metric-lbl">Q01/Q02 Entanglement Fidelity:</span> <strong class="text-cyan" id="tabletFidelity">0.998</strong></div>
+                            <div><span class="t-metric-lbl">Error Rates:</span> <strong class="text-pink" id="tabletError">0.6%</strong></div>
+                        </div>
+                    </div>
+
+                    <!-- Hardware Context info -->
+                    <div class="tablet-col tablet-col-info">
+                        <div class="tablet-subhead">Context</div>
+                        <p class="tablet-context-text">
+                            Circuit operations and gate definitions are based on specific emulated hardware profiles and noise models.
+                        </p>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
+    <!-- Bottom HUD Metadata Overlay -->
+    <footer class="hud-footer">
+        <div class="hud-footer-left">
+            <span class="hud-meta">ENGINE: <strong>Q-CORE</strong></span>
+            <span class="hud-meta">HARDWARE: <strong>EMULATED</strong></span>
+            <span class="hud-meta">STATUS: <strong class="text-green">SIMULATING</strong></span>
+        </div>
+        <div class="hud-footer-ticks">
+            <span>26°W</span>
+            <span>18°S</span>
+            <span>0°</span>
+            <span>15°E</span>
+            <span>20°E</span>
+            <span>38°E</span>
+            <span>48°E</span>
+        </div>
+    </footer>
+
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+
+    <!-- Application Scripts -->
+    <script src="{{ url_for('static', filename='js/lattice-viz.js') }}"></script>
     <script src="{{ url_for('static', filename='js/circuit-builder.js') }}"></script>
     <script src="{{ url_for('static', filename='js/code-editor.js') }}"></script>
     <script src="{{ url_for('static', filename='js/quantum-simulator.js') }}"></script>
     <script src="{{ url_for('static', filename='js/ai-assistant.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>
